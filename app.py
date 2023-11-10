@@ -40,10 +40,8 @@ if __name__ == '__main__':
         tts(question)
         answer=today[real_data][1]
         user_answer=voice()
-
         print("正在判断对错")
         response=chatllm(question,answer,user_answer)
-
         print(response)
         tts(response)
 

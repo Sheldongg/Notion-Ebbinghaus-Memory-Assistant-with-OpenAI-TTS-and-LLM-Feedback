@@ -150,6 +150,3 @@ def voice():
     for line in transcription:
         print(line)
 
-# # 当脚本作为主程序运行时，调用 main 函数
-# if __name__ == "__main__":
-#     voice()

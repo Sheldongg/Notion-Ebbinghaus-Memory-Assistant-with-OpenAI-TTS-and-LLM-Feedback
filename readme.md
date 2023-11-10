@@ -27,8 +27,10 @@ Automated Review Tracking: Dynamically updates the review schedule in Notion bas
 ## Notion Database Configuration
 The Notion database should have the following columns:
 - `Next`: Date of the next review, calculated based on the Ebbinghaus curve.
+```if(prop("Level") == "2", dateAdd(prop("Date Wrong"), 1, "days"), if(prop("Level") == "3", dateAdd(prop("Date Wrong"), 3, "days"),if(prop("Level") == "4", dateAdd(prop("Date Wrong"), 8, "days"), if(prop("Level") == "5", dateAdd(prop("Date Wrong"), 19, "days"), if(prop("Level") == "6", dateAdd(prop("Date Wrong"), 44, "days"), if(prop("Level") == "7", dateAdd(prop("Date Wrong"), 100, "days"), if(prop("Level") == "8", dateAdd(prop("Date Wrong"), 226, "days"), if(prop("Level") == "9", dateAdd(prop("Date Wrong"), 510, "days"), if(prop("Level") == "gg", dateAdd(prop("Date Wrong"), 1149, "days"), prop("Date Wrong"))))))))))```
 - `Level`: The current memory strength level of the item, influencing the review interval.
 - `Date Wrong`: The date when the answer was last incorrect, used as a base for calculating the next review date.
+![notion](static/iShot_2023-11-10_17.57.20.png)
 
 ## Conclusion
 This script is an effective tool for anyone looking to enhance their learning and memory retention using the principles of the Ebbinghaus forgetting curve, combined with the convenience and flexibility of Notion.
