@@ -1,5 +1,5 @@
 ## README for Notion-Integrated Ebbinghaus Memory Assistant with OpenAI TTS and LLM Feedback
-
+![原理](static/9db47cbe-5ef3-4013-a55d-e82179a00f9b.png)
 ## Overview
 This application integrates a simplified version of the Ebbinghaus forgetting curve with Notion, aimed at enhancing memory retention through repeated review. The script automates the process of scheduling reviews and provides an interactive way to test and reinforce learning.
 
