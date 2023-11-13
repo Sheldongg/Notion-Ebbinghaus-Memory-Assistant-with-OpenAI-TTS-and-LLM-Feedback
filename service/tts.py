@@ -15,7 +15,7 @@ client = OpenAI(
 )
 
 
-def chatllm(question,answer,user_answer,model="gpt-3.5-turbo"):
+def chatllm(question,answer,user_answer,model="gpt-4-1106-preview"):
     response_out = client.chat.completions.create(
       model=model,
       messages=[
