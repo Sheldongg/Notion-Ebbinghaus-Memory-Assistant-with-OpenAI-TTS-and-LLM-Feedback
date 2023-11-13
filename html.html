@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Stream Test</title>
+</head>
+<body>
+    <h1>Test Streamed Audio API</h1>
+    <input type="text" id="textInput" placeholder="Enter text">
+    <button onclick="getAudio()">Get Audio</button>
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        async function getAudio() {
+            const textInput = document.getElementById('textInput').value;
+            const response = await fetch('http://127.0.0.1:8000/streamed_audio?input_text=' + encodeURIComponent(textInput), {
+                method: 'GET'
+            });
+
+            if (!response.ok) {
+                alert("Error from server: " + response.statusText);
+                return;
+            }
+
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = audioUrl;
+            audioPlayer.play();
+        }
+    </script>
+</body>
+</html>

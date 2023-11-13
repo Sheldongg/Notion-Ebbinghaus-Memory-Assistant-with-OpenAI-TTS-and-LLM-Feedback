@@ -27,6 +27,15 @@ def chatllm(question,answer,user_answer,model="gpt-3.5-turbo"):
       ]
     )
     return response_out.choices[0].message.content
+def originchat(question,model="gpt-3.5-turbo"):
+    response_out = client.chat.completions.create(
+      model=model,
+      messages=[
+        {"role": "system", "content": "你是一个人情练达，能说会到的秘书，现在要根据我的问题进行回答。回答的语气要幽默风趣，调皮可爱用中文回复。"},
+        {"role": "user", "content": f"""问题：{question}"""},
+      ]
+    )
+    return response_out.choices[0].message.content
 
 
 def tts(ttscontent):
