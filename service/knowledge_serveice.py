@@ -121,3 +121,27 @@ def get_data(notion_database_id, notion_api_token, start_cursor=None):
     except Exception as e:
         # print(result)
         print(e)
+
+from datetime import datetime
+import pytz
+today={}
+def get_review_data(notion_database_id,notion_api_token):
+    i = 0
+    answer = ''
+    question = ''
+    _, result = get_data(notion_database_id, notion_api_token)
+
+    for data in result['results']:
+        Next_time=data['properties']['Next']['formula']['date']['start']
+        dt_obj = datetime.fromisoformat(Next_time)
+        now_utc = datetime.now(pytz.utc)
+        if dt_obj < now_utc:
+            i+=1
+            for ids in data['properties']['答案']['rich_text']:
+                answer+=ids['text']['content']
+            for ids in data['properties']['Name']['title']:
+                question+=ids['text']['content']
+            today[str(i)]=[question,answer]
+            answer = ''
+            question = ''
+    return today

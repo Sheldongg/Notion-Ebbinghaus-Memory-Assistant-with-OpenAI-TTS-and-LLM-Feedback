@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stream Audio Test</title>
+</head>
+<body>
+    <h1>Text to Speech Stream Test</h1>
+    <input type="text" id="textInput" placeholder="Enter text here">
+    <button onclick="generateAndPlayAudio()">Generate and Play Audio</button>
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        async function generateAndPlayAudio() {
+            var textInput = document.getElementById('textInput').value;
+            const audioPlayer = document.getElementById('audioPlayer');
+
+            // 使用正确的mime类型：'audio/webm; codecs="opus"'
+            const mediaSource = new MediaSource();
+            audioPlayer.src = URL.createObjectURL(mediaSource);
+
+            mediaSource.addEventListener('sourceopen', async (_) => {
+                try {
+                    // 确认后端支持WebM格式
+                    const sourceBuffer = mediaSource.addSourceBuffer('audio/webm; codecs="opus"');
+                    const response = await fetch(`http://127.0.0.1:8000/generate-audio?input_text=${encodeURIComponent(textInput)}`, {
+                        method: 'POST'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const reader = response.body.getReader();
+                    reader.read().then(function process({ done, value }) {
+                        if (done) {
+                            if (!sourceBuffer.updating && mediaSource.readyState === 'open') {
+                                mediaSource.endOfStream();
+                            }
+                            return;
+                        }
+                        if (!sourceBuffer.updating) {
+                            sourceBuffer.appendBuffer(value);
+                            reader.read().then(process);
+                        } else {
+                            // 如果SourceBuffer正在更新，等待再次处理
+                            sourceBuffer.addEventListener('updateend', () => {
+                                process({ done, value }); // 再次尝试处理块
+                            }, { once: true }); // 确保事件只处理一次
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error while processing the audio stream', e);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
